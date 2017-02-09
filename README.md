@@ -1,6 +1,6 @@
 # RestLess ToolBox (RLTB)
 
-The RestLess ToolBox is a collection of useful tools for [Overwolf](https://www.overwolf.com) developers.
+The RestLess ToolBox is a collection of useful tools for [Overwolf](http://www.overwolf.com) developers.
 It simplifies common tasks and workflows, and also provides an abstraction layer on top
 of Overwolf's API, often with simpler interfaces.
 
