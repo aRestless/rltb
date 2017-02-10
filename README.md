@@ -72,19 +72,178 @@ all other resource files, so you don't have to repeat yourself.
 
 ## rltb.conf.json
 
+The `rltb.conf.json` is a general configuration file that is placed in the app's root folder and contains
+settings for the different RLTB modules, which are explained in the upcoming sections. On top of these
+settings, the file can also contain an `import` array, much like the resource files described above, to
+import more configuration files. This is particularly useful if you use (or provide) a library, that itself
+uses the RLTB.
+
 ## RLTB.games
+
+This module contains convenience methods for `overwolf.games`.
+
+    RLTB.games.onGamePropertyChanged(callback);
+
+    RLTB.games.onResolutionChanged(callback);
+
+    RLTB.games.getResolution();
+
+    RLTB.games.onGameFocusChanged(callback);
+
+    RTLB.games.onGameClosed(gameName, callback);
 
 ## RLTB.loca
 
+This module is used for translations. These translations are located in a file defined in `rltb.conf.json`.
+
+    //rltb.conf.json
+    {
+        "loca" : {
+            "file" : "/rltb.loca.json",
+            "defaultLanguage" : "en"
+        }
+    }
+
+The localization files have a hierarchical structure, beginning with the short language code of the
+respective language
+
+    //rltb.loca.json
+    {
+        "loca" : {
+            "en" : {
+                "menu" : {
+                    "title" : "Menu",
+                    "content" : "The menu's content"
+                }
+            },
+            "de" : {
+                "menu" : {
+                    "title" : "Menü",
+                    "content" : "Der Inhalte des Menüs"
+                }
+            }
+        },
+        "import" : [
+            "/some/other/file.loca.json"
+        ]
+    }
+    
+The language that is used is the one set in Overwolf (and returned by `RLTB.util.getCurrentLanguage()`).
+If there are no translation for that specific language, the `defaultLanguage` defined in 
+`rltb.conf.json` will be used.
+
+To get a translation for an entry, call
+
+    RLTB.loca.get("menu.title");
+    
+You can also use them in template files
+
+    <h1>{{menu.title}}</h2>
+
 ## RLTB.rpc
+
+In development.
 
 ## RLTB.settings
 
+Provides an hierarchical settings mechanism. Default settings can be set in `rltb.conf.json`.
+
+    //rltb.conf.json
+    {
+        "settings" : {
+            "default" : {
+                "performance" : {
+                    "refreshTime" : 5000
+                },
+                "appearance" : {
+                    "color" : "#FF0000",
+                    "size" : {
+                        "width" : 1920,
+                        "height" : 1080
+                    }
+                },
+                "someArray" : [1,2,3]
+            }
+        }
+    }
+
+    RLTB.settings.get("performance.refreshTime");
+    
+    RLTB.settings.get("performance.refreshTime', 7500);
+    
+    RTLB.settings.set("appearance.size", {
+        "width": 1024,
+        "height": 768
+    });
+    
+    RLTB.settings.push("someArray", 4);
+    
+    RLTB.settings.onChange(function(size) {
+        console.log(size.width);
+    }, "appearance.size");
+    
+    
+
 ## RLTB.templates
+This modules expects template files to be placed in `/Files/templates` (which is likely to change). Those
+templates can be imported either via JavaScript
+
+    RLTB.templates.import("myTemplate");
+    
+or directly in HTML, by providing using a `template` element
+
+    <template data-src="myTemplate"></template>
+
+This replacement in HTML is automatically executed on page load (and occurs before `RLTB.ready()`).
+Templates can also include other templates this way.
+    
+Both of these examples would import `/Files/templates/myTemplate.html`.
 
 ## RLTB.util
 
+    RLTB.util.isWorker();
+    
+    RLTB.util.getCurrentLanguage();
+    
+    RLTB.util.getCurrentConfig();
+
 ## RLTB.windows
+
+This module contains convenience methods for `overwolf.windows`
+
+    RLTB.windows.isMainWindow();
+    
+    RLTB.windows.getCurrentWindowName();
+    
+    RLTB.windows.getCurrentWindowPath();
+    
+    RLTB.windows.open("index");
+    RLTB.windows.open("subWindow");
+    RLTB.windows.open("index", "subWindow");
+    
+    RLTB.windows.close();
+    RLTB.windows.close("subWindow");
+    RLTB.windows.close("subWindow", "index", callback);
+    
+    RLTB.windows.closeAll();
+    
+    RLTB.windows.minimize();
+    
+    RLTB.windows.restore(callback);
+    
+    RLTB.windows.changeSize(width, height);
+    
+    RLTB.windows.changePositionAndSize(x,y,width,height);
+    
+    RLTB.windows.centerAroundMouse();
+    
+    RLTB.windows.centerAround(x,y);
+    
+    RLTB.windows.getCurrentWindow(callback);
+    
+    RLTB.windows.keepInFullscreen();
+    
+    RLTB.windows.closeWithGame(gameName);
 
 ## RLTB.workers
 
